@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Multi-Lingual and Multi-Speaker Speech Synthesis</title>
+    </head>
+    <style>
+
+        body{
+            margin: 0;
+
+        }
+        .top{
+            background-image: url("static/大创网页头部背景.png");
+            width: 100%;
+            height: 100px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        ul{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color:dodgerblue;
+            font-size:x-large;
+            font-family:'Times New Roman', Times, serif;
+            font-weight: bold;
+            display:block;
+            text-align:center;
+            letter-spacing: 3px;
+        }
+        li{
+            display:inline-block;
+            vertical-align: middle;
+        }
+        li a{
+            color: white;
+            text-align: center;
+            text-decoration: underline;
+            padding: 140px,160px;
+            display:block;
+            width: 200px;
+            padding:10px;
+        }
+        li a:hover{
+            background-color: greenyellow;
+        }
+        input{
+            outline:none;
+            border: 5px solid #ccc;
+            border-radius: 6px;
+            padding: 10px;
+            width: 1000px;
+            font-size: 24px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+                -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+                -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+        }
+        input:focus{
+            border-color: #66afe9;
+                    outline: 0;
+                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+                    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+        }
+
+        .input
+        {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input button{
+            border: 0;
+            display: block;
+            padding: 20px;
+            margin-top: 100px;
+            margin: 0 auto;
+        }
+
+        audio{
+            display: block;
+            padding: 10px;
+            margin: 0 auto;            
+        }
+
+    </style>
+    <body>
+        <div class="top"></div>
+        <ul>
+            <li><a class="active" href="#Profile">项目介绍</a></li>
+            <li><a href="#Group">团队介绍</a></li>
+            <li><a href="#Reference">参考文献</a></li>
+            <li><a href="#Thanks">致谢</a></li>
+        </ul>
+        <div class="input">
+            <form id="text-to-voice-form">
+                <input type="text" id="text-input" placeholder="请输入文本">
+                <br><br>
+                <button type="submit">生成语音</button>
+            </form>
+
+        </div>
+        <audio id="voice-audio" type="audio/wav" controls></audio>
+
+        <script>
+            // JavaScript 代码
+            const form = document.getElementById('text-to-voice-form');
+            const audio = document.getElementById('voice-audio');
+    
+    
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const text = document.getElementById('text-input').value;
+    
+                fetch('/generate_voice', {
+                    method: 'POST',
+                    body: new URLSearchParams({ text }),
+    
+                })
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    //获取文件名
+                    // var contentDisposition = response.headers.get('Content-Disposition');
+                    // var filename = contentDisposition.split('filename=')[1];
+                    // filename = filename.replace(/"/g, '');
+                    // wav_a.download=filename;
+                    //
+                    return response.blob();
+                })
+                .then(blob => {
+                    const objectUrl = URL.createObjectURL(blob);
+                    audio.src = objectUrl;
+                    wav_a.href = objectUrl;
+                    wav_a.innerText=text;
+                    console.log(text);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+    
+            });
+        </script>
+
+    </body>
+</html>
