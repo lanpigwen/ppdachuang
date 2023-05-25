@@ -16,20 +16,27 @@ def generate_voice():
     text = request.form['text']
     #
     #
-    bytes_io,file_name=wordtovoice(text)
+    bytes_io,file_name,state=wordtovoice(text)
     #
     #
-
-    return send_file(
-        bytes_io,
-        mimetype='audio/wav',
-        as_attachment=True,
-        attachment_filename=file_name
-    )
+    if state=='seccessed':
+        return send_file(
+            bytes_io,
+            mimetype='audio/wav',
+            as_attachment=True,
+            download_name=file_name
+        )
+    else:
+         return send_file(
+            bytes_io,
+            mimetype='audio/wav',
+            as_attachment=True,
+            download_name=file_name
+        )
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True,port=5000)
 
 
 
