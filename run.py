@@ -14,9 +14,11 @@ def index():
 def generate_voice():
 
     text = request.form['text']
+    language=request.form['lan']
+    print(language)
     #
     #
-    bytes_io,file_name,state=wordtovoice(text)
+    bytes_io,file_name,state=wordtovoice(text,language)
     #
     #
     if state=='seccessed':

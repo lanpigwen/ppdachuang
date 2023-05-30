@@ -1,36 +1,34 @@
 from io import BytesIO
 from synthesize import MYsynthesize
 import os
+import re
 
+def sanitize_filename(filename):
+    # 定义不允许出现在文件名中的符号
+    invalid_chars = r'[\\/:"*?<>|]'
 
-def text_wav(text):
-    """
-    输入：text
+    # 使用正则表达式将不允许的符号替换为空格
+    sanitized_filename = re.sub(invalid_chars, ' ', filename)
+    
+    return sanitized_filename
 
-    输出：example.wav文件地址、"example.wav"文件名
-
-    根据text生成 example.wav文件，返回example.wav的文件地址
-
-    """
-
-
-    return "example.wav","example.wav"
-
-# import asyncio
-
-def wordtovoice(text):
+def wordtovoice(text,lan):
     """
     经过某函数，将输入的字段，转化为wav文件，并open with，返回一个file.read()
     """
     # 定义异步函数
-    # async def process_synthesis(text):
-    MYsynthesize(text)
+    text=text.replace('?','？')
+    text=sanitize_filename(text)
+    MYsynthesize(text,lan)
 
     # # 创建协程并运行
     # asyncio.run(process_synthesis(text))
 
     file_name = text +'.wav'
-    file_path = 'output/result/AISHELL3/' + file_name
+    if lan=='zh':
+        file_path = 'output/result/AISHELL3/' + file_name
+    else:
+        file_path = 'output/result/LJSpeech/' + file_name
 
     try:
         with open(file_path, 'rb') as open_wav:

@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Multi-Lingual and Multi-Speaker Speech Synthesis</title>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
     <link href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
         #loading-spinner {
@@ -55,10 +54,13 @@
     <div class="container">
         <form id="text-to-voice-form">
             <div class="form-group">
-                <label for="text-input">请输入文本</label>
                 <input type="text" class="form-control" id="text-input" placeholder="请输入文本">
             </div>
             <div class="form-row">
+                <select class="form-control col-2 ml-1" id="language">
+                    <option value="zh">中文</option>
+                    <option value="en">英文</option>
+                </select>
                 <div class="col-auto">
                     <button type="submit" class="btn btn-primary">生成语音</button>
                 </div>
@@ -73,17 +75,13 @@
             </div>
         </form>
         
-        <!-- <div id="loading-spinner" class="text-center mt-4">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div> -->
         <br>
         <audio id="voice-audio" type="audio/wav" controls></audio>
     </div>
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
         // JavaScript 代码
@@ -94,6 +92,7 @@
         form.addEventListener('submit', (event) => {
             event.preventDefault();
             const text = document.getElementById('text-input').value;
+            const lan=document.getElementById('language').value;
             if (text === '') {
                 alert('请输入文本'); // Display an alert message if the text is empty
                 return;
@@ -101,7 +100,7 @@
             showLoadingSpinner();
             fetch('/generate_voice', {
                 method: 'POST',
-                body: new URLSearchParams({ text }),
+                body: new URLSearchParams({ text,lan }),
 
             })
                 .then(response => {

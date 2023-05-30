@@ -127,21 +127,33 @@ class MyArgs:
 
 
 
-def MYsynthesize(text):
-    args = MyArgs(
-        restore_step=600000,
-        mode="single",
-        text=text,
-        speaker_id=0,
-        preprocess_config="config/AISHELL3/preprocess.yaml",
-        model_config="config/AISHELL3/model.yaml",
-        train_config="config/AISHELL3/train.yaml",
-        pitch_control=1.0,
-        energy_control=1.0,
-        duration_control=1.0
-    )
-
-
+def MYsynthesize(text,lan):
+    if lan=='zh':
+        args = MyArgs(
+            restore_step=600000,
+            mode="single",
+            text=text,
+            speaker_id=0,
+            preprocess_config="config/AISHELL3/preprocess.yaml",
+            model_config="config/AISHELL3/model.yaml",
+            train_config="config/AISHELL3/train.yaml",
+            pitch_control=1.0,
+            energy_control=1.0,
+            duration_control=1.0
+        )
+    else:
+        args = MyArgs(
+            restore_step=900000,
+            mode="single",
+            text=text,
+            speaker_id=0,
+            preprocess_config="config/LJSpeech/preprocess.yaml",
+            model_config="config/LJSpeech/model.yaml",
+            train_config="config/LJSpeech/train.yaml",
+            pitch_control=1.0,
+            energy_control=1.0,
+            duration_control=1.0
+        )
 
     # Check source texts
     if args.mode == "batch":
